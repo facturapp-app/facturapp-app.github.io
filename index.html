@@ -408,17 +408,35 @@
           </div>
         </div>
         <div style="border-top:1px solid var(--border); margin-top:1.25rem; padding-top:1.25rem;">
-          <p style="font-size:13px; color:var(--muted); margin-bottom:1rem;">Para suscribirte o consultar el precio, escribinos por WhatsApp y te respondemos a la brevedad.</p>
-          <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20suscribirme%20a%20FacturApp" target="_blank" rel="noopener noreferrer" class="btn btn-pwa" style="background:#25d366; color:#fff; border:none; border-color:#25d366;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Suscribirme por WhatsApp
-          </a>
+          <p style="font-size:13px; color:var(--muted); margin-bottom:1.25rem;">Completá tus datos y te redirigimos al pago. Al confirmarse, te mostramos el código de activación en pantalla.</p>
+          <form id="form-suscripcion" style="display:flex; flex-direction:column; gap:10px; text-align:left;">
+            <div>
+              <label style="font-size:12px; font-weight:600; color:var(--muted); display:block; margin-bottom:4px;">Nombre del negocio</label>
+              <input id="f-negocio" type="text" placeholder="Ej: Mi Empresa S.R.L." style="width:100%; border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-size:14px; outline:none; background:var(--surface); color:var(--text);" />
+            </div>
+            <div>
+              <label style="font-size:12px; font-weight:600; color:var(--muted); display:block; margin-bottom:4px;">Nombre de usuario <span style="color:#dc2626;">*</span></label>
+              <input id="f-usuario" type="text" placeholder="El que usaste al configurar FacturApp" autocapitalize="none" required style="width:100%; border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-size:14px; outline:none; background:var(--surface); color:var(--text);" />
+            </div>
+            <div>
+              <label style="font-size:12px; font-weight:600; color:var(--muted); display:block; margin-bottom:4px;">DNI / CUIT / CUIL <span style="color:#dc2626;">*</span></label>
+              <input id="f-dni" type="tel" placeholder="Ej: 25606476" required style="width:100%; border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-size:14px; outline:none; background:var(--surface); color:var(--text);" />
+            </div>
+            <div>
+              <label style="font-size:12px; font-weight:600; color:var(--muted); display:block; margin-bottom:4px;">Email <span style="color:#dc2626;">*</span></label>
+              <input id="f-email" type="email" placeholder="donde recibís el código" required style="width:100%; border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-size:14px; outline:none; background:var(--surface); color:var(--text);" />
+            </div>
+            <p id="form-error" style="color:#dc2626; font-size:13px; display:none; margin:0;"></p>
+            <button type="submit" id="btn-pagar" class="btn btn-primary" style="margin-top:4px; font-size:15px; padding:12px;">
+              Continuar al pago
+            </button>
+          </form>
         </div>
       </div>
     </div>
 
     <p style="text-align:center; font-size:13px; color:var(--muted);">
-      Una vez que realices el pago te enviamos tu código de activación personalizado.
+      Una vez confirmado el pago, tu código de activación aparece en pantalla.
     </p>
   </div>
 </section>
@@ -522,6 +540,129 @@
   }
 
   cargarDescargas();
+
+  // --- Formulario de suscripción ---
+  const WORKER_URL = 'REEMPLAZAR_CON_URL_DEL_WORKER'; // ej: https://facturapp-worker.tu-cuenta.workers.dev
+
+  const params = new URLSearchParams(location.search);
+  if (params.get('pago') === 'ok') {
+    const paymentId = params.get('payment_id');
+    const ref       = params.get('ref');
+    const seccion   = document.getElementById('suscribirse');
+
+    seccion.innerHTML = `
+      <div style="max-width:480px; margin:0 auto; text-align:center; padding:3rem 1rem;">
+        <div id="estado-pago">
+          <div style="display:inline-block; width:40px; height:40px; border:3px solid #bfdbfe; border-top-color:#2563eb; border-radius:50%; animation:spin .8s linear infinite; margin-bottom:1rem;"></div>
+          <p style="color:var(--muted); font-size:15px;">Verificando tu pago...</p>
+        </div>
+      </div>
+      <style>@keyframes spin { to { transform:rotate(360deg); } }</style>`;
+
+    async function mostrarCodigo() {
+      if (!paymentId || !ref) {
+        document.getElementById('estado-pago').innerHTML = `<p style="color:#dc2626;">No pudimos verificar el pago. Contactanos por WhatsApp o email.</p>`;
+        return;
+      }
+      try {
+        const res  = await fetch(`${WORKER_URL}/api/codigo?payment_id=${encodeURIComponent(paymentId)}&ref=${encodeURIComponent(ref)}`);
+        const data = await res.json();
+        if (data.codigo) {
+          document.getElementById('estado-pago').innerHTML = `
+            <div style="width:64px;height:64px;background:#f0fdf4;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;">
+              <svg width="32" height="32" fill="none" stroke="#16a34a" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2 style="font-size:1.4rem;font-weight:600;margin-bottom:0.5rem;">¡Pago confirmado!</h2>
+            ${data.nombreNegocio ? `<p style="color:var(--muted);font-size:14px;margin-bottom:1.5rem;">Bienvenido, <strong>${data.nombreNegocio}</strong></p>` : '<div style="margin-bottom:1.5rem;"></div>'}
+            <div style="background:#eef5fc;border:2px solid #b5d4ee;border-radius:14px;padding:1.5rem 2rem;margin-bottom:1.25rem;">
+              <p style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:10px;">Código de activación</p>
+              <p id="codigo-txt" style="color:#1a3c5e;font-size:2rem;font-weight:700;letter-spacing:.2em;margin:0 0 8px;">${data.codigo}</p>
+              <p style="color:var(--muted);font-size:12px;margin:0;">Usuario: <strong>${data.usuario}</strong></p>
+            </div>
+            <button onclick="copiarCodigo()" id="btn-copiar" style="background:#2563eb;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:1.5rem;">
+              Copiar código
+            </button>
+            <div style="background:#f8f8f6;border-radius:10px;padding:1rem 1.25rem;text-align:left;margin-bottom:1.5rem;">
+              <p style="font-size:13px;font-weight:600;margin-bottom:8px;">¿Cómo activarlo?</p>
+              <ol style="color:var(--muted);font-size:13px;margin:0;padding-left:20px;line-height:1.8;">
+                <li>Abrí FacturApp en tu dispositivo</li>
+                <li>Cuando aparezca la pantalla de activación, tocá <em>"Ya tengo un código"</em></li>
+                <li>Ingresá el código de arriba y presioná <strong>Activar</strong></li>
+              </ol>
+            </div>
+            <p style="color:var(--muted);font-size:13px;">Guardá este código en un lugar seguro. Si lo perdés, podés volver a este link.</p>`;
+        } else if (res.status === 402) {
+          document.getElementById('estado-pago').innerHTML = `
+            <p style="color:#d97706;font-size:15px;margin-bottom:1rem;">El pago está siendo procesado. Esto puede tardar unos minutos.</p>
+            <button onclick="mostrarCodigo()" style="background:#2563eb;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;cursor:pointer;">Reintentar</button>`;
+        } else {
+          throw new Error(data.error || 'Error desconocido');
+        }
+      } catch {
+        document.getElementById('estado-pago').innerHTML = `
+          <p style="color:#dc2626;font-size:15px;margin-bottom:1rem;">No pudimos obtener tu código. Guardá este link y volvé a abrirlo en unos minutos.</p>
+          <button onclick="mostrarCodigo()" style="background:#2563eb;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;cursor:pointer;">Reintentar</button>`;
+      }
+    }
+
+    function copiarCodigo() {
+      const txt = document.getElementById('codigo-txt')?.textContent || '';
+      navigator.clipboard.writeText(txt).then(() => {
+        const btn = document.getElementById('btn-copiar');
+        if (btn) { btn.textContent = '¡Copiado!'; setTimeout(() => btn.textContent = 'Copiar código', 2000); }
+      });
+    }
+    window.copiarCodigo = copiarCodigo;
+    window.mostrarCodigo = mostrarCodigo;
+
+    mostrarCodigo();
+  }
+  if (params.get('pago') === 'error') {
+    const err = document.getElementById('form-error');
+    if (err) { err.textContent = 'El pago no pudo procesarse. Intentá de nuevo.'; err.style.display = 'block'; }
+  }
+
+  const form = document.getElementById('form-suscripcion');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-pagar');
+      const errEl = document.getElementById('form-error');
+      const usuario = document.getElementById('f-usuario').value.trim();
+      const dni     = document.getElementById('f-dni').value.trim();
+      const email   = document.getElementById('f-email').value.trim();
+      const nombre  = document.getElementById('f-negocio').value.trim();
+
+      errEl.style.display = 'none';
+      if (!usuario || !dni || !email) {
+        errEl.textContent = 'Completá los campos obligatorios (*)';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Procesando...';
+
+      try {
+        const res  = await fetch(`${WORKER_URL}/api/crear-pago`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ usuario, dni, email, nombreNegocio: nombre }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          location.href = data.url;
+        } else {
+          throw new Error(data.error || 'Error desconocido');
+        }
+      } catch (err) {
+        errEl.textContent = 'No pudimos procesar tu solicitud. Intentá más tarde.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Continuar al pago';
+      }
+    });
+  }
 </script>
 </body>
 </html>
