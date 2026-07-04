@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FacturApp — Sistema de facturación y gestión comercial</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8f8f6;
+      --surface: #ffffff;
+      --border: #e4e4e0;
+      --text: #1a1a18;
+      --muted: #6b6b67;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      height: 56px;
+    }
+    .nav-logo {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 5rem 1.5rem 3.5rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 4px 14px;
+      border-radius: 999px;
+      border: 1px solid #bfdbfe;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* VERSION INFO */
+    #version-info {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+
+    /* DOWNLOAD CARDS */
+    .platforms {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    .platform-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+    }
+    .platform-card.featured {
+      border-color: #bfdbfe;
+      box-shadow: 0 0 0 3px #eff6ff;
+    }
+
+    .platform-icon {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .platform-icon svg { width: 100%; height: 100%; }
+
+    .platform-name {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .platform-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s, transform 0.1s;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary {
+      background: #f1f5f9;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: #e2e8f0; }
+    .btn-pwa {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    .btn-pwa:hover { background: #dcfce7; }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    /* FEATURES */
+    .features-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 3.5rem 1.5rem;
+    }
+    .features-section h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 2.5rem;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .feature {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .feature-icon {
+      width: 36px;
+      height: 36px;
+      background: #eff6ff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .feature-icon svg { width: 20px; height: 20px; color: var(--accent); }
+    .feature h3 { font-size: 15px; font-weight: 600; }
+    .feature p { font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+    /* INSTALL GUIDE */
+    .guide-section {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem;
+    }
+    .guide-section h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+    .steps { display: flex; flex-direction: column; gap: 12px; }
+    .step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .step-body p { font-size: 13px; color: var(--muted); }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    .loading {
+      color: var(--muted);
+      font-size: 13px;
+      padding: 8px 0;
+    }
+    .error-msg { color: #dc2626; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/"><span>Factur</span>App</a>
+</nav>
+
+<section class="hero">
+  <div class="badge">Sistema de gestión comercial</div>
+  <h1>Gestioná tu negocio<br>con <span>FacturApp</span></h1>
+  <p>Pedidos, clientes, proveedores, stock, caja e informes. Funciona en todos tus dispositivos.</p>
+  <div id="version-info">Cargando versión...</div>
+</section>
+
+<div class="platforms">
+
+  <div class="platform-card featured">
+    <div class="platform-icon">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="48" height="48" rx="10" fill="#eff6ff"/>
+        <path d="M10 14h28v20H10z" fill="#2563eb" opacity=".15"/>
+        <path d="M10 14h13v9H10zM23 14h15v9H23zM10 23h13v11H10zM23 23h15v11H23z" fill="#2563eb" opacity=".8"/>
+        <rect x="18" y="34" width="12" height="3" rx="1" fill="#2563eb" opacity=".5"/>
+        <rect x="14" y="37" width="20" height="2" rx="1" fill="#2563eb" opacity=".4"/>
+      </svg>
+    </div>
+    <div class="platform-name">Windows</div>
+    <div class="platform-desc">Instalador para Windows 10 y 11 (64-bit)</div>
+    <div class="btn-group" id="win-btns">
+      <span class="loading">Cargando...</span>
+    </div>
+  </div>
+
+  <div class="platform-card">
+    <div class="platform-icon">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="48" height="48" rx="10" fill="#f0fdf4"/>
+        <path d="M24 8c-3.5 0-6.5 2-8 5-2.5-.3-5 1-6.2 3.2C7.6 19 8 22.4 10 25c-1 2.2-.8 4.8.5 6.8 1.5 2.2 4 3.3 6.5 3 1.5 2.2 4 3.5 6.7 3.5h.6c2.7 0 5.2-1.3 6.7-3.5 2.5.3 5-.8 6.5-3 1.3-2 1.5-4.6.5-6.8 2-2.6 2.4-6 1.2-8.8C37.7 14 35.2 12.7 32.7 13c-1.7-3-4.7-5-8.7-5z" fill="#166534" opacity=".15"/>
+        <path d="M24 13c-1.8 4-5.5 6-9 5.5C14 23 15.5 28 19 30.5c-.5 2.5.5 5 3 6.5 2 1 4 1 6 0 2.5-1.5 3.5-4 3-6.5 3.5-2.5 5-7.5 4-12C31.5 19 27.8 17 26 13h-2z" fill="#16a34a" opacity=".7"/>
+      </svg>
+    </div>
+    <div class="platform-name">Mac</div>
+    <div class="platform-desc">Para MacBook y iMac (Intel y Apple Silicon)</div>
+    <div class="btn-group" id="mac-btns">
+      <span class="loading">Cargando...</span>
+    </div>
+  </div>
+
+  <div class="platform-card">
+    <div class="platform-icon">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="48" height="48" rx="10" fill="#fef9f0"/>
+        <rect x="14" y="8" width="20" height="32" rx="4" fill="#f59e0b" opacity=".2"/>
+        <rect x="16" y="11" width="16" height="22" rx="2" fill="#f59e0b" opacity=".5"/>
+        <circle cx="24" cy="36" r="2" fill="#f59e0b"/>
+        <rect x="21" y="9" width="6" height="1.5" rx=".75" fill="#f59e0b" opacity=".6"/>
+      </svg>
+    </div>
+    <div class="platform-name">iOS y Android</div>
+    <div class="platform-desc">Agregala a la pantalla de inicio desde el browser</div>
+    <div class="btn-group">
+      <a class="btn btn-pwa" href="https://facturapp-3qb.pages.dev" target="_blank">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Abrir FacturApp
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <h2>Todo lo que necesitás en un solo lugar</h2>
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      </div>
+      <h3>Pedidos</h3>
+      <p>Creá y gestioná pedidos de clientes con detalle de productos y precios.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <h3>Clientes y proveedores</h3>
+      <p>Cuenta corriente, historial de compras y pagos en un solo lugar.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM1 7l2-4h18l2 4"/><path d="M12 12v.01"/></svg>
+      </div>
+      <h3>Stock</h3>
+      <p>Control de inventario actualizado en tiempo real con cada pedido.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+      <h3>Caja</h3>
+      <p>Registrá ingresos y egresos con resumen diario y saldo en tiempo real.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <h3>Informes</h3>
+      <p>Rentabilidad, retiros y análisis de ventas para tomar mejores decisiones.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <h3>Multi-dispositivo</h3>
+      <p>Windows, Mac, iOS y Android. Tus datos siempre disponibles.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GUIDE -->
+<section class="guide-section">
+  <h2>¿Cómo instalar en Windows?</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>Descargá el instalador</h4>
+        <p>Hacé clic en "Descargar para Windows" y guardá el archivo .exe.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>Ejecutá el instalador</h4>
+        <p>Hacé doble clic en el archivo descargado. Si Windows muestra una advertencia, elegí "Más información" → "Ejecutar de todas formas".</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>¡Listo!</h4>
+        <p>FacturApp se instala automáticamente y queda en el menú inicio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  FacturApp &mdash; Sistema de facturación y gestión comercial
+</footer>
+
+<script>
+  const REPO = 'Nichousw11/facturapp';
+  const API  = `https://api.github.com/repos/${REPO}/releases/latest`;
+
+  function dlBtn(href, label, cls) {
+    const a = document.createElement('a');
+    a.href = href;
+    a.className = `btn ${cls}`;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.innerHTML = `
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      ${label}`;
+    return a;
+  }
+
+  async function cargarDescargas() {
+    try {
+      const res  = await fetch(API);
+      const data = await res.json();
+
+      document.getElementById('version-info').textContent =
+        `Versión ${data.tag_name} · Publicada el ${new Date(data.published_at).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+
+      const assets = data.assets || [];
+      const exe    = assets.find(a => a.name.endsWith('.exe') && a.name.toLowerCase().includes('setup'));
+      const dmgArm = assets.find(a => a.name.includes('arm64') && a.name.endsWith('.dmg'));
+      const dmgX64 = assets.find(a => !a.name.includes('arm64') && a.name.endsWith('.dmg'));
+
+      // Windows
+      const winDiv = document.getElementById('win-btns');
+      winDiv.innerHTML = '';
+      if (exe) {
+        winDiv.appendChild(dlBtn(exe.browser_download_url, 'Descargar para Windows', 'btn-primary'));
+      } else {
+        winDiv.innerHTML = '<span class="error-msg">No disponible aún</span>';
+      }
+
+      // Mac
+      const macDiv = document.getElementById('mac-btns');
+      macDiv.innerHTML = '';
+      if (dmgArm) macDiv.appendChild(dlBtn(dmgArm.browser_download_url, 'Mac Apple Silicon (M1/M2/M3)', 'btn-secondary'));
+      if (dmgX64) macDiv.appendChild(dlBtn(dmgX64.browser_download_url, 'Mac Intel', 'btn-secondary'));
+      if (!dmgArm && !dmgX64) macDiv.innerHTML = '<span class="error-msg">No disponible aún</span>';
+
+    } catch (e) {
+      document.getElementById('version-info').textContent = '';
+      document.getElementById('win-btns').innerHTML = '<span class="error-msg">Error al cargar descargas</span>';
+      document.getElementById('mac-btns').innerHTML = '<span class="error-msg">Error al cargar descargas</span>';
+    }
+  }
+
+  cargarDescargas();
+</script>
+</body>
+</html>
