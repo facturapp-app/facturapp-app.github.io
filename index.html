@@ -412,8 +412,10 @@
 </footer>
 
 <script>
-  const REPO = 'Nichousw11/facturapp';
-  const API  = `https://api.github.com/repos/${REPO}/releases/latest`;
+  const REPO         = 'Nichousw11/facturapp';
+  const API_LATEST   = `https://api.github.com/repos/${REPO}/releases/latest`;
+  const API_LIST     = `https://api.github.com/repos/${REPO}/releases?per_page=5`;
+  const RELEASES_URL = `https://github.com/${REPO}/releases/latest`;
 
   function dlBtn(href, label, cls) {
     const a = document.createElement('a');
@@ -429,39 +431,49 @@
     return a;
   }
 
+  function fallbackBtns() {
+    document.getElementById('version-info').textContent = '';
+    const winDiv = document.getElementById('win-btns');
+    winDiv.innerHTML = '';
+    winDiv.appendChild(dlBtn(RELEASES_URL, 'Descargar para Windows', 'btn-primary'));
+    const macDiv = document.getElementById('mac-btns');
+    macDiv.innerHTML = '';
+    macDiv.appendChild(dlBtn(RELEASES_URL, 'Descargar para Mac', 'btn-secondary'));
+  }
+
+  function renderRelease(data) {
+    if (!data || !data.tag_name) { fallbackBtns(); return; }
+
+    const fecha = new Date(data.published_at);
+    const fechaStr = isNaN(fecha)
+      ? ''
+      : ' · Publicada el ' + fecha.toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('version-info').textContent = `Versión ${data.tag_name}${fechaStr}`;
+
+    const assets = data.assets || [];
+    const exe    = assets.find(a => a.name.endsWith('.exe') && /setup/i.test(a.name));
+    const dmgArm = assets.find(a => a.name.includes('arm64') && a.name.endsWith('.dmg'));
+    const dmgX64 = assets.find(a => !a.name.includes('arm64') && a.name.endsWith('.dmg'));
+
+    const winDiv = document.getElementById('win-btns');
+    winDiv.innerHTML = '';
+    winDiv.appendChild(dlBtn(exe ? exe.browser_download_url : RELEASES_URL, 'Descargar para Windows', 'btn-primary'));
+
+    const macDiv = document.getElementById('mac-btns');
+    macDiv.innerHTML = '';
+    if (dmgArm) macDiv.appendChild(dlBtn(dmgArm.browser_download_url, 'Descargar para Mac (Apple Silicon)', 'btn-secondary'));
+    if (dmgX64) macDiv.appendChild(dlBtn(dmgX64.browser_download_url, 'Descargar para Mac (Intel)', 'btn-secondary'));
+    if (!dmgArm && !dmgX64) macDiv.appendChild(dlBtn(RELEASES_URL, 'Descargar para Mac', 'btn-secondary'));
+  }
+
   async function cargarDescargas() {
     try {
-      const res  = await fetch(API);
+      let res = await fetch(API_LATEST);
+      if (!res.ok) res = await fetch(API_LIST);
       const data = await res.json();
-
-      document.getElementById('version-info').textContent =
-        `Versión ${data.tag_name} · Publicada el ${new Date(data.published_at).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })}`;
-
-      const assets = data.assets || [];
-      const exe    = assets.find(a => a.name.endsWith('.exe') && a.name.toLowerCase().includes('setup'));
-      const dmgArm = assets.find(a => a.name.includes('arm64') && a.name.endsWith('.dmg'));
-      const dmgX64 = assets.find(a => !a.name.includes('arm64') && a.name.endsWith('.dmg'));
-
-      // Windows
-      const winDiv = document.getElementById('win-btns');
-      winDiv.innerHTML = '';
-      if (exe) {
-        winDiv.appendChild(dlBtn(exe.browser_download_url, 'Descargar para Windows', 'btn-primary'));
-      } else {
-        winDiv.innerHTML = '<span class="error-msg">No disponible aún</span>';
-      }
-
-      // Mac
-      const macDiv = document.getElementById('mac-btns');
-      macDiv.innerHTML = '';
-      if (dmgArm) macDiv.appendChild(dlBtn(dmgArm.browser_download_url, 'Descargar para Mac (Apple Silicon)', 'btn-secondary'));
-      if (dmgX64) macDiv.appendChild(dlBtn(dmgX64.browser_download_url, 'Descargar para Mac (Intel)', 'btn-secondary'));
-      if (!dmgArm && !dmgX64) macDiv.innerHTML = '<span class="error-msg">No disponible aún</span>';
-
+      renderRelease(Array.isArray(data) ? data[0] : data);
     } catch (e) {
-      document.getElementById('version-info').textContent = '';
-      document.getElementById('win-btns').innerHTML = '<span class="error-msg">Error al cargar descargas</span>';
-      document.getElementById('mac-btns').innerHTML = '<span class="error-msg">Error al cargar descargas</span>';
+      fallbackBtns();
     }
   }
 
