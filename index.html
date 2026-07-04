@@ -454,8 +454,8 @@
       // Mac
       const macDiv = document.getElementById('mac-btns');
       macDiv.innerHTML = '';
-      if (dmgArm) macDiv.appendChild(dlBtn(dmgArm.browser_download_url, 'Mac Apple Silicon (M1/M2/M3)', 'btn-secondary'));
-      if (dmgX64) macDiv.appendChild(dlBtn(dmgX64.browser_download_url, 'Mac Intel', 'btn-secondary'));
+      if (dmgArm) macDiv.appendChild(dlBtn(dmgArm.browser_download_url, 'Descargar para Mac (Apple Silicon)', 'btn-secondary'));
+      if (dmgX64) macDiv.appendChild(dlBtn(dmgX64.browser_download_url, 'Descargar para Mac (Intel)', 'btn-secondary'));
       if (!dmgArm && !dmgX64) macDiv.innerHTML = '<span class="error-msg">No disponible aún</span>';
 
     } catch (e) {
