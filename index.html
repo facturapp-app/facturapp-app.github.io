@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FacturApp — Sistema de facturación y gestión comercial</title>
+  <title>FacturApp — Sistemas de gestión comercial</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -43,10 +43,39 @@
     }
     .nav-logo span { color: var(--accent); }
 
+    /* SELECTOR DE RUBRO */
+    .rubro-selector {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 1.5rem 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .rubro-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .rubro-btn:hover { border-color: #bfdbfe; color: var(--text); }
+    .rubro-btn.activo {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
     /* HERO */
     .hero {
       text-align: center;
-      padding: 5rem 1.5rem 3.5rem;
+      padding: 3rem 1.5rem 3.5rem;
       max-width: 680px;
       margin: 0 auto;
     }
@@ -267,116 +296,21 @@
   <a class="nav-logo" href="/"><span>Factur</span>App</a>
 </nav>
 
+<div class="rubro-selector" id="rubro-selector"></div>
+
 <section class="hero">
-  <div class="badge">Sistema de gestión comercial</div>
-  <h1>Gestioná tu negocio<br>con <span>FacturApp</span></h1>
-  <p>Pedidos, clientes, proveedores, stock, caja e informes. Funciona en todos tus dispositivos.</p>
+  <div class="badge" id="hero-badge">Sistema de gestión comercial</div>
+  <h1 id="hero-title">Gestioná tu negocio<br>con <span>FacturApp</span></h1>
+  <p id="hero-subtitle">Pedidos, clientes, proveedores, stock, caja e informes. Funciona en todos tus dispositivos.</p>
   <div id="version-info">Cargando versión...</div>
 </section>
 
-<div class="platforms">
-
-  <div class="platform-card featured">
-    <div class="platform-icon">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="48" height="48" rx="10" fill="#eff6ff"/>
-        <path d="M10 14h28v20H10z" fill="#2563eb" opacity=".15"/>
-        <path d="M10 14h13v9H10zM23 14h15v9H23zM10 23h13v11H10zM23 23h15v11H23z" fill="#2563eb" opacity=".8"/>
-        <rect x="18" y="34" width="12" height="3" rx="1" fill="#2563eb" opacity=".5"/>
-        <rect x="14" y="37" width="20" height="2" rx="1" fill="#2563eb" opacity=".4"/>
-      </svg>
-    </div>
-    <div class="platform-name">Windows</div>
-    <div class="platform-desc">Compatible desde Windows 7 SP1 en adelante (32 y 64 bits)</div>
-    <div class="btn-group" id="win-btns">
-      <span class="loading">Cargando...</span>
-    </div>
-  </div>
-
-  <div class="platform-card">
-    <div class="platform-icon">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="48" height="48" rx="10" fill="#f0fdf4"/>
-        <path d="M24 8c-3.5 0-6.5 2-8 5-2.5-.3-5 1-6.2 3.2C7.6 19 8 22.4 10 25c-1 2.2-.8 4.8.5 6.8 1.5 2.2 4 3.3 6.5 3 1.5 2.2 4 3.5 6.7 3.5h.6c2.7 0 5.2-1.3 6.7-3.5 2.5.3 5-.8 6.5-3 1.3-2 1.5-4.6.5-6.8 2-2.6 2.4-6 1.2-8.8C37.7 14 35.2 12.7 32.7 13c-1.7-3-4.7-5-8.7-5z" fill="#166534" opacity=".15"/>
-        <path d="M24 13c-1.8 4-5.5 6-9 5.5C14 23 15.5 28 19 30.5c-.5 2.5.5 5 3 6.5 2 1 4 1 6 0 2.5-1.5 3.5-4 3-6.5 3.5-2.5 5-7.5 4-12C31.5 19 27.8 17 26 13h-2z" fill="#16a34a" opacity=".7"/>
-      </svg>
-    </div>
-    <div class="platform-name">Mac</div>
-    <div class="platform-desc">Para MacBook y iMac (Intel y Apple Silicon)</div>
-    <div class="btn-group" id="mac-btns">
-      <span class="loading">Cargando...</span>
-    </div>
-  </div>
-
-  <div class="platform-card">
-    <div class="platform-icon">
-      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="48" height="48" rx="10" fill="#fef9f0"/>
-        <rect x="14" y="8" width="20" height="32" rx="4" fill="#f59e0b" opacity=".2"/>
-        <rect x="16" y="11" width="16" height="22" rx="2" fill="#f59e0b" opacity=".5"/>
-        <circle cx="24" cy="36" r="2" fill="#f59e0b"/>
-        <rect x="21" y="9" width="6" height="1.5" rx=".75" fill="#f59e0b" opacity=".6"/>
-      </svg>
-    </div>
-    <div class="platform-name">iOS y Android</div>
-    <div class="platform-desc">Agregala a la pantalla de inicio desde el browser</div>
-    <div class="btn-group">
-      <a class="btn btn-pwa" href="https://facturapp-3qb.pages.dev" target="_blank">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        Abrir FacturApp
-      </a>
-    </div>
-  </div>
-
-</div>
+<div class="platforms" id="platforms"></div>
 
 <!-- FEATURES -->
 <section class="features-section">
-  <h2>Todo lo que necesitás en un solo lugar</h2>
-  <div class="features">
-    <div class="feature">
-      <div class="feature-icon">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-      </div>
-      <h3>Pedidos</h3>
-      <p>Creá y gestioná pedidos de clientes con detalle de productos y precios.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-      </div>
-      <h3>Clientes y proveedores</h3>
-      <p>Cuenta corriente, historial de compras y pagos en un solo lugar.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM1 7l2-4h18l2 4"/><path d="M12 12v.01"/></svg>
-      </div>
-      <h3>Stock</h3>
-      <p>Control de inventario actualizado en tiempo real con cada pedido.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-      </div>
-      <h3>Caja</h3>
-      <p>Registrá ingresos y egresos con resumen diario y saldo en tiempo real.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      </div>
-      <h3>Informes</h3>
-      <p>Rentabilidad, retiros y análisis de ventas para tomar mejores decisiones.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-      </div>
-      <h3>Multi-dispositivo</h3>
-      <p>Windows, Mac, iOS y Android. Tus datos siempre disponibles.</p>
-    </div>
-  </div>
+  <h2 id="features-title">Todo lo que necesitás en un solo lugar</h2>
+  <div class="features" id="features-grid"></div>
 </section>
 
 <!-- SUSCRIBIRSE -->
@@ -387,8 +321,8 @@
     <div class="platform-card" style="margin-bottom: 1.5rem; border-color: #bfdbfe; box-shadow: 0 0 0 3px #eff6ff;">
       <div style="width:100%; text-align:center;">
         <span style="background:#eff6ff; color:#2563eb; font-size:12px; font-weight:600; padding:4px 14px; border-radius:999px; border:1px solid #bfdbfe; display:inline-block; margin-bottom:1rem;">Acceso completo</span>
-        <p class="platform-name" style="font-size:22px; margin-bottom:4px;">FacturApp</p>
-        <p class="platform-desc" style="margin-bottom:1.5rem;">Pedidos · Clientes · Proveedores · Stock · Caja · Informes</p>
+        <p class="platform-name" style="font-size:22px; margin-bottom:4px;" id="plan-nombre">FacturApp</p>
+        <p class="platform-desc" style="margin-bottom:1.5rem;" id="plan-desc">Pedidos · Clientes · Proveedores · Stock · Caja · Informes</p>
         <div style="margin-bottom:1rem;">
           <span style="font-size:2rem; font-weight:700; color:#1a3c5e;">$300.000</span>
           <span style="font-size:14px; color:var(--muted);"> ARS / año</span>
@@ -420,7 +354,7 @@
             </div>
             <div>
               <label style="font-size:12px; font-weight:600; color:var(--muted); display:block; margin-bottom:4px;">Nombre de usuario <span style="color:#dc2626;">*</span></label>
-              <input id="f-usuario" type="text" placeholder="El que usaste al configurar FacturApp" autocapitalize="none" required style="width:100%; border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-size:14px; outline:none; background:var(--surface); color:var(--text);" />
+              <input id="f-usuario" type="text" placeholder="El que usaste al configurar el sistema" autocapitalize="none" required style="width:100%; border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-size:14px; outline:none; background:var(--surface); color:var(--text);" />
             </div>
             <div>
               <label style="font-size:12px; font-weight:600; color:var(--muted); display:block; margin-bottom:4px;">DNI / CUIT / CUIL <span style="color:#dc2626;">*</span></label>
@@ -453,7 +387,7 @@
       <div class="step-num">1</div>
       <div class="step-body">
         <h4>Descargá el instalador</h4>
-        <p>Hacé clic en "Descargar para Windows" y guardá el archivo .exe.</p>
+        <p id="guide-paso1">Hacé clic en "Descargar para Windows" y guardá el archivo .exe.</p>
       </div>
     </div>
     <div class="step">
@@ -467,21 +401,130 @@
       <div class="step-num">3</div>
       <div class="step-body">
         <h4>¡Listo!</h4>
-        <p>FacturApp se instala automáticamente y queda en el menú inicio.</p>
+        <p id="guide-paso3">El sistema se instala automáticamente y queda listo para usar.</p>
       </div>
     </div>
   </div>
 </section>
 
-<footer>
-  FacturApp &mdash; Sistema de facturación y gestión comercial
+<footer id="footer-text">
+  FacturApp &mdash; Sistemas de gestión comercial
 </footer>
 
 <script>
-  const REPO         = 'Nichousw11/facturapp-releases';
-  const API_LATEST   = `https://api.github.com/repos/${REPO}/releases/latest`;
-  const API_LIST     = `https://api.github.com/repos/${REPO}/releases?per_page=5`;
-  const RELEASES_URL = `https://github.com/${REPO}/releases/latest`;
+  // ──────────────────────────────────────────────────────────────
+  // Rubros: cada uno arma su propia ventana (hero, descargas, features).
+  // Mismo precio y mismo flujo de pago (Mercado Pago) para todos.
+  // ──────────────────────────────────────────────────────────────
+  const RUBROS = {
+    repartos: {
+      label: 'Repartos',
+      badge: 'Sistema de gestión comercial',
+      heroTitle: 'Gestioná tu negocio<br>con <span>FacturApp</span>',
+      heroSubtitle: 'Pedidos, clientes, proveedores, stock, caja e informes. Funciona en todos tus dispositivos.',
+      featuresTitle: 'Todo lo que necesitás en un solo lugar',
+      planNombre: 'FacturApp',
+      planDesc: 'Pedidos · Clientes · Proveedores · Stock · Caja · Informes',
+      footer: 'FacturApp — Sistema de facturación y gestión comercial',
+      guidePaso1: 'Hacé clic en "Descargar para Windows" y guardá el archivo .exe.',
+      guidePaso3: 'FacturApp se instala automáticamente y queda en el menú inicio.',
+      descarga: { tipo: 'github', repo: 'Nichousw11/facturapp-releases', soloWindows: false },
+      features: [
+        { icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', h: 'Pedidos', p: 'Creá y gestioná pedidos de clientes con detalle de productos y precios.' },
+        { icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2|circle:9,7,4|M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75', h: 'Clientes y proveedores', p: 'Cuenta corriente, historial de compras y pagos en un solo lugar.' },
+        { icon: 'M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM1 7l2-4h18l2 4|M12 12v.01', h: 'Stock', p: 'Control de inventario actualizado en tiempo real con cada pedido.' },
+        { icon: 'line:12,1,12,23|M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6', h: 'Caja', p: 'Registrá ingresos y egresos con resumen diario y saldo en tiempo real.' },
+        { icon: 'line:18,20,18,10|line:12,20,12,4|line:6,20,6,14', h: 'Informes', p: 'Rentabilidad, retiros y análisis de ventas para tomar mejores decisiones.' },
+        { icon: 'rect:2,3,20,14,2|M8 21h8M12 17v4', h: 'Multi-dispositivo', p: 'Windows, Mac, iOS y Android. Tus datos siempre disponibles.' },
+      ],
+    },
+    panaderias: {
+      label: 'Panaderías productoras',
+      badge: 'Gestión de confitería y panadería',
+      heroTitle: 'Gestioná tu panadería<br>con <span>PanApp</span>',
+      heroSubtitle: 'Insumos, producción, ventas, caja y reparto. Pensado para confiterías y panaderías que producen lo que venden.',
+      featuresTitle: 'De la materia prima a la venta, todo conectado',
+      planNombre: 'PanApp',
+      planDesc: 'Insumos · Producción · Ventas (POS) · Caja · Reparto · Informes',
+      footer: 'PanApp — Sistema de gestión para panaderías y confiterías',
+      guidePaso1: 'Hacé clic en "Descargar para Windows" y guardá el archivo .exe.',
+      guidePaso3: 'PanApp se instala automáticamente y queda listo para abrir el punto de venta.',
+      descarga: { tipo: 'github', repo: 'Nichousw11/panapp-releases', soloWindows: true },
+      features: [
+        { icon: 'M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM1 7l2-4h18l2 4|M12 12v.01', h: 'Insumos', p: 'Stock de materias primas con alerta de mínimo y descuento automático por receta.' },
+        { icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', h: 'Producción', p: 'Recetas que descuentan insumos y suman stock de producto terminado.' },
+        { icon: 'rect:2,3,20,14,2|M8 21h8M12 17v4', h: 'Punto de venta', p: 'Ventas rápidas por código o nombre, con turnos y cierre de caja.' },
+        { icon: 'line:12,1,12,23|M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6', h: 'Caja y tesorería', p: 'Ingresos y egresos por forma de pago, arqueo diario y saldo en tiempo real.' },
+        { icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2|circle:9,7,4|M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75', h: 'Reparto', p: 'Entregas a clientes con precio diferenciado y cuenta corriente propia.' },
+        { icon: 'line:18,20,18,10|line:12,20,12,4|line:6,20,6,14', h: 'Informes', p: 'Ventas por turno y responsable, ranking de productos y rentabilidad.' },
+      ],
+    },
+  };
+
+  let rubroActual = 'repartos';
+
+  function iconSvg(spec) {
+    return spec.split('|').map(parte => {
+      if (parte.startsWith('circle:')) {
+        const [cx, cy, r] = parte.slice(7).split(',');
+        return `<circle cx="${cx}" cy="${cy}" r="${r}"/>`;
+      }
+      if (parte.startsWith('line:')) {
+        const [x1, y1, x2, y2] = parte.slice(5).split(',');
+        return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+      }
+      if (parte.startsWith('rect:')) {
+        const [x, y, w, h, rx] = parte.slice(5).split(',');
+        return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}"/>`;
+      }
+      return `<path d="${parte}"/>`;
+    }).join('');
+  }
+
+  function renderRubro(clave) {
+    rubroActual = clave;
+    const r = RUBROS[clave];
+
+    // Selector
+    const sel = document.getElementById('rubro-selector');
+    sel.innerHTML = '';
+    for (const [k, v] of Object.entries(RUBROS)) {
+      const btn = document.createElement('button');
+      btn.className = 'rubro-btn' + (k === clave ? ' activo' : '');
+      btn.textContent = v.label;
+      btn.onclick = () => renderRubro(k);
+      sel.appendChild(btn);
+    }
+
+    // Hero
+    document.getElementById('hero-badge').textContent = r.badge;
+    document.getElementById('hero-title').innerHTML = r.heroTitle;
+    document.getElementById('hero-subtitle').textContent = r.heroSubtitle;
+
+    // Features
+    document.getElementById('features-title').textContent = r.featuresTitle;
+    const grid = document.getElementById('features-grid');
+    grid.innerHTML = r.features.map(f => `
+      <div class="feature">
+        <div class="feature-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">${iconSvg(f.icon)}</svg>
+        </div>
+        <h3>${f.h}</h3>
+        <p>${f.p}</p>
+      </div>`).join('');
+
+    // Plan / precio (mismo para todos, cambia el nombre y el detalle)
+    document.getElementById('plan-nombre').textContent = r.planNombre;
+    document.getElementById('plan-desc').textContent = r.planDesc;
+
+    // Guía / footer
+    document.getElementById('guide-paso1').textContent = r.guidePaso1;
+    document.getElementById('guide-paso3').textContent = r.guidePaso3;
+    document.getElementById('footer-text').textContent = r.footer;
+
+    // Descargas
+    renderPlatforms(r);
+  }
 
   function dlBtn(href, label, cls) {
     const a = document.createElement('a');
@@ -497,18 +540,81 @@
     return a;
   }
 
-  function fallbackBtns() {
-    document.getElementById('version-info').textContent = '';
-    const winDiv = document.getElementById('win-btns');
-    winDiv.innerHTML = '';
-    winDiv.appendChild(dlBtn(RELEASES_URL, 'Descargar para Windows', 'btn-primary'));
-    const macDiv = document.getElementById('mac-btns');
-    macDiv.innerHTML = '';
-    macDiv.appendChild(dlBtn(RELEASES_URL, 'Descargar para Mac', 'btn-secondary'));
+  const winIcon = `
+    <rect width="48" height="48" rx="10" fill="#eff6ff"/>
+    <path d="M10 14h28v20H10z" fill="#2563eb" opacity=".15"/>
+    <path d="M10 14h13v9H10zM23 14h15v9H23zM10 23h13v11H10zM23 23h15v11H23z" fill="#2563eb" opacity=".8"/>
+    <rect x="18" y="34" width="12" height="3" rx="1" fill="#2563eb" opacity=".5"/>
+    <rect x="14" y="37" width="20" height="2" rx="1" fill="#2563eb" opacity=".4"/>`;
+  const macIcon = `
+    <rect width="48" height="48" rx="10" fill="#f0fdf4"/>
+    <path d="M24 8c-3.5 0-6.5 2-8 5-2.5-.3-5 1-6.2 3.2C7.6 19 8 22.4 10 25c-1 2.2-.8 4.8.5 6.8 1.5 2.2 4 3.3 6.5 3 1.5 2.2 4 3.5 6.7 3.5h.6c2.7 0 5.2-1.3 6.7-3.5 2.5.3 5-.8 6.5-3 1.3-2 1.5-4.6.5-6.8 2-2.6 2.4-6 1.2-8.8C37.7 14 35.2 12.7 32.7 13c-1.7-3-4.7-5-8.7-5z" fill="#166534" opacity=".15"/>
+    <path d="M24 13c-1.8 4-5.5 6-9 5.5C14 23 15.5 28 19 30.5c-.5 2.5.5 5 3 6.5 2 1 4 1 6 0 2.5-1.5 3.5-4 3-6.5 3.5-2.5 5-7.5 4-12C31.5 19 27.8 17 26 13h-2z" fill="#16a34a" opacity=".7"/>`;
+  const mobileIcon = `
+    <rect width="48" height="48" rx="10" fill="#fef9f0"/>
+    <rect x="14" y="8" width="20" height="32" rx="4" fill="#f59e0b" opacity=".2"/>
+    <rect x="16" y="11" width="16" height="22" rx="2" fill="#f59e0b" opacity=".5"/>
+    <circle cx="24" cy="36" r="2" fill="#f59e0b"/>
+    <rect x="21" y="9" width="6" height="1.5" rx=".75" fill="#f59e0b" opacity=".6"/>`;
+
+  function platformCard({ icon, nombre, desc, featured, bodyId }) {
+    return `
+      <div class="platform-card${featured ? ' featured' : ''}">
+        <div class="platform-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">${icon}</svg></div>
+        <div class="platform-name">${nombre}</div>
+        <div class="platform-desc">${desc}</div>
+        <div class="btn-group" id="${bodyId}"><span class="loading">Cargando...</span></div>
+      </div>`;
   }
 
-  function renderRelease(data) {
-    if (!data || !data.tag_name) { fallbackBtns(); return; }
+  function renderPlatforms(r) {
+    const cont = document.getElementById('platforms');
+    if (r.descarga.tipo === 'github') {
+      if (r.descarga.soloWindows) {
+        cont.innerHTML = platformCard({
+          icon: winIcon,
+          nombre: 'Windows',
+          desc: 'Instalador para la PC de administración del comercio. Requiere Windows 10 o superior.',
+          featured: true,
+          bodyId: 'win-btns',
+        });
+      } else {
+        cont.innerHTML =
+          platformCard({ icon: winIcon, nombre: 'Windows', desc: 'Compatible desde Windows 7 SP1 en adelante (32 y 64 bits)', featured: true, bodyId: 'win-btns' }) +
+          platformCard({ icon: macIcon, nombre: 'Mac', desc: 'Para MacBook y iMac (Intel y Apple Silicon)', bodyId: 'mac-btns' }) +
+          `<div class="platform-card">
+            <div class="platform-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">${mobileIcon}</svg></div>
+            <div class="platform-name">iOS y Android</div>
+            <div class="platform-desc">Agregala a la pantalla de inicio desde el browser</div>
+            <div class="btn-group">
+              <a class="btn btn-pwa" href="https://facturapp-3qb.pages.dev" target="_blank">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Abrir FacturApp
+              </a>
+            </div>
+          </div>`;
+      }
+      cargarDescargasGithub(r.descarga.repo, r.descarga.soloWindows);
+    }
+  }
+
+  // --- Descargas de GitHub Releases (genérico: sirve para cualquier rubro/repo) ---
+  function fallbackBtnsGithub(releasesUrl, soloWindows) {
+    document.getElementById('version-info').textContent = '';
+    const winDiv = document.getElementById('win-btns');
+    if (!winDiv) return;
+    winDiv.innerHTML = '';
+    winDiv.appendChild(dlBtn(releasesUrl, 'Descargar para Windows', 'btn-primary'));
+    if (!soloWindows) {
+      const macDiv = document.getElementById('mac-btns');
+      macDiv.innerHTML = '';
+      macDiv.appendChild(dlBtn(releasesUrl, 'Descargar para Mac', 'btn-secondary'));
+    }
+  }
+
+  function renderReleaseGithub(data, clave, releasesUrl, soloWindows) {
+    if (rubroActual !== clave) return; // el usuario cambió de rubro mientras cargaba
+    if (!data || !data.tag_name) { fallbackBtnsGithub(releasesUrl, soloWindows); return; }
 
     const fecha = new Date(data.published_at);
     const fechaStr = isNaN(fecha)
@@ -517,35 +623,44 @@
     document.getElementById('version-info').textContent = `Versión ${data.tag_name}${fechaStr}`;
 
     const assets = data.assets || [];
-    const exe    = assets.find(a => a.name.endsWith('.exe') && /setup/i.test(a.name));
-    const dmgArm = assets.find(a => a.name.includes('arm64') && a.name.endsWith('.dmg'));
-    const dmgX64 = assets.find(a => !a.name.includes('arm64') && a.name.endsWith('.dmg'));
+    const exe    = soloWindows
+      ? assets.find(a => a.name.endsWith('.exe'))
+      : assets.find(a => a.name.endsWith('.exe') && /setup/i.test(a.name));
 
     const winDiv = document.getElementById('win-btns');
     winDiv.innerHTML = '';
-    winDiv.appendChild(dlBtn(exe ? exe.browser_download_url : RELEASES_URL, 'Descargar para Windows', 'btn-primary'));
+    winDiv.appendChild(dlBtn(exe ? exe.browser_download_url : releasesUrl, 'Descargar para Windows', 'btn-primary'));
 
-    const macDiv = document.getElementById('mac-btns');
-    macDiv.innerHTML = '';
-    if (dmgArm) macDiv.appendChild(dlBtn(dmgArm.browser_download_url, 'Descargar para Mac (Apple Silicon)', 'btn-secondary'));
-    if (dmgX64) macDiv.appendChild(dlBtn(dmgX64.browser_download_url, 'Descargar para Mac (Intel)', 'btn-secondary'));
-    if (!dmgArm && !dmgX64) macDiv.appendChild(dlBtn(RELEASES_URL, 'Descargar para Mac', 'btn-secondary'));
-  }
-
-  async function cargarDescargas() {
-    try {
-      let res = await fetch(API_LATEST);
-      if (!res.ok) res = await fetch(API_LIST);
-      const data = await res.json();
-      renderRelease(Array.isArray(data) ? data[0] : data);
-    } catch (e) {
-      fallbackBtns();
+    if (!soloWindows) {
+      const dmgArm = assets.find(a => a.name.includes('arm64') && a.name.endsWith('.dmg'));
+      const dmgX64 = assets.find(a => !a.name.includes('arm64') && a.name.endsWith('.dmg'));
+      const macDiv = document.getElementById('mac-btns');
+      macDiv.innerHTML = '';
+      if (dmgArm) macDiv.appendChild(dlBtn(dmgArm.browser_download_url, 'Descargar para Mac (Apple Silicon)', 'btn-secondary'));
+      if (dmgX64) macDiv.appendChild(dlBtn(dmgX64.browser_download_url, 'Descargar para Mac (Intel)', 'btn-secondary'));
+      if (!dmgArm && !dmgX64) macDiv.appendChild(dlBtn(releasesUrl, 'Descargar para Mac', 'btn-secondary'));
     }
   }
 
-  cargarDescargas();
+  async function cargarDescargasGithub(repo, soloWindows) {
+    const clave       = rubroActual;
+    const apiLatest   = `https://api.github.com/repos/${repo}/releases/latest`;
+    const apiList     = `https://api.github.com/repos/${repo}/releases?per_page=5`;
+    const releasesUrl = `https://github.com/${repo}/releases/latest`;
+    document.getElementById('version-info').textContent = 'Cargando versión...';
+    try {
+      let res = await fetch(apiLatest);
+      if (!res.ok) res = await fetch(apiList);
+      const data = await res.json();
+      renderReleaseGithub(Array.isArray(data) ? data[0] : data, clave, releasesUrl, soloWindows);
+    } catch (e) {
+      fallbackBtnsGithub(releasesUrl, soloWindows);
+    }
+  }
 
-  // --- Formulario de suscripción ---
+  renderRubro('repartos');
+
+  // --- Formulario de suscripción (mismo flujo de pago para todos los rubros) ---
   const WORKER_URL = 'https://facturapp-worker.facturappwo.workers.dev';
 
   const params = new URLSearchParams(location.search);
@@ -589,7 +704,7 @@
             <div style="background:#f8f8f6;border-radius:10px;padding:1rem 1.25rem;text-align:left;margin-bottom:1.5rem;">
               <p style="font-size:13px;font-weight:600;margin-bottom:8px;">¿Cómo activarlo?</p>
               <ol style="color:var(--muted);font-size:13px;margin:0;padding-left:20px;line-height:1.8;">
-                <li>Abrí FacturApp en tu dispositivo</li>
+                <li>Abrí el sistema en tu dispositivo</li>
                 <li>Cuando aparezca la pantalla de activación, tocá <em>"Ya tengo un código"</em></li>
                 <li>Ingresá el código de arriba y presioná <strong>Activar</strong></li>
               </ol>
@@ -651,7 +766,7 @@
         const res  = await fetch(`${WORKER_URL}/api/crear-pago`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ usuario, dni, email, nombreNegocio: nombre }),
+          body: JSON.stringify({ usuario, dni, email, nombreNegocio: nombre, producto: rubroActual }),
         });
         const data = await res.json();
         if (data.url) {
